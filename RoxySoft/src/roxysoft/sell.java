@@ -6,6 +6,7 @@
 
 package roxysoft;
 
+import java.awt.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,6 +22,7 @@ import java.util.logging.Logger;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.text.DateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
@@ -45,13 +47,26 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class sell extends javax.swing.JFrame {
     private double subnum;
-    private String whatShow = "1stShowing";
-    private int firstshow;
-    private int secondshow;
-    private int thirdshow;
-    private int fourthshow;
+    
+    
+    private int indexSelect =0;
+    private String whichShow = "1st Showing";
+    private int ticketsSold[] = {0,0,0,0,0};
+    private int ticketsLeft[] = {352,352,352,352,352};
+    
+    private int tempTicketCounter=0;
+    
+    private int ticketTotal=0;
+    
+    private int seatsLeft = 5;
+    private int tempSeatsLeft = 0;
+    
+    DateFormat dateFormatL = new SimpleDateFormat("HH:mm MM/dd/yyyy");
+    DateFormat dateFormatS = new SimpleDateFormat("MM/dd/yyyy");
+    DateFormat dateFormatTicket = new SimpleDateFormat("MMddyy");
+    Date date = new Date();
+    private Component frame;
   
-
     /**
      * Creates new form sell
      */
@@ -71,6 +86,17 @@ public class sell extends javax.swing.JFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        buttonGroup3 = new javax.swing.ButtonGroup();
+        buttonGroup4 = new javax.swing.ButtonGroup();
+        buttonGroup5 = new javax.swing.ButtonGroup();
+        buttonGroup6 = new javax.swing.ButtonGroup();
+        buttonGroup7 = new javax.swing.ButtonGroup();
+        buttonGroup8 = new javax.swing.ButtonGroup();
+        buttonGroup9 = new javax.swing.ButtonGroup();
+        buttonGroup10 = new javax.swing.ButtonGroup();
+        buttonGroup11 = new javax.swing.ButtonGroup();
+        buttonGroup12 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         kd = new javax.swing.JButton();
@@ -112,16 +138,48 @@ public class sell extends javax.swing.JFrame {
         mdiscount = new javax.swing.JButton();
         kticket = new javax.swing.JButton();
         monster = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        secondShowing = new javax.swing.JButton();
-        thirdShowing = new javax.swing.JButton();
-        forthShowing = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
         canbox = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        dateStamp = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        fifthLeft = new javax.swing.JTextField();
+        thirdLeft = new javax.swing.JTextField();
+        forthLeft = new javax.swing.JTextField();
+        forthSold = new javax.swing.JTextField();
+        secondSold = new javax.swing.JTextField();
+        fifthSold = new javax.swing.JTextField();
+        thirdSold = new javax.swing.JTextField();
+        thirdTickNumb = new javax.swing.JTextField();
+        forthTickNumb = new javax.swing.JTextField();
+        firstSold = new javax.swing.JTextField();
+        fifthTickNumb = new javax.swing.JTextField();
+        label1 = new java.awt.Label();
+        secondLeft = new javax.swing.JTextField();
+        firstLeft = new javax.swing.JTextField();
+        label4 = new java.awt.Label();
+        label3 = new java.awt.Label();
+        label2 = new java.awt.Label();
+        secondTickNumb = new javax.swing.JTextField();
+        firstTickNumb = new javax.swing.JTextField();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
+        jRadioButton3 = new javax.swing.JRadioButton();
+        jRadioButton4 = new javax.swing.JRadioButton();
+        jRadioButton5 = new javax.swing.JRadioButton();
+        jLabel6 = new javax.swing.JLabel();
+        label5 = new java.awt.Label();
+        tbox = new javax.swing.JTextField();
+        FutureT = new javax.swing.JButton();
+        futureTickets = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+
+        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Roxysoft");
@@ -381,34 +439,6 @@ public class sell extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("1st Showing");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        secondShowing.setText("2nd Showing");
-        secondShowing.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                secondShowingActionPerformed(evt);
-            }
-        });
-
-        thirdShowing.setText("3rd Showing");
-        thirdShowing.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                thirdShowingActionPerformed(evt);
-            }
-        });
-
-        forthShowing.setText("4th Showing");
-        forthShowing.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                forthShowingActionPerformed(evt);
-            }
-        });
-
         cancel.setText("Subtract");
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -420,8 +450,240 @@ public class sell extends javax.swing.JFrame {
 
         jLabel4.setText("To null ticket, erase. Or disfigure show time and ticket type");
 
+        dateStamp.setText("            ");
+        dateStamp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dateStampActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Date Stamp");
+
+        fifthLeft.setText(" ");
+        fifthLeft.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fifthLeftActionPerformed(evt);
+            }
+        });
+
+        thirdLeft.setText(" ");
+
+        forthLeft.setText(" ");
+
+        forthSold.setText(" ");
+
+        secondSold.setText(" ");
+        secondSold.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                secondSoldActionPerformed(evt);
+            }
+        });
+
+        fifthSold.setText(" ");
+
+        thirdSold.setText(" ");
+
+        thirdTickNumb.setText(" ");
+
+        forthTickNumb.setText(" ");
+
+        firstSold.setText(" ");
+
+        fifthTickNumb.setText(" ");
+
+        label1.setText("Showings");
+
+        secondLeft.setText(" ");
+
+        firstLeft.setText(" ");
+
+        label4.setText("Ticket Num");
+
+        label3.setText("Sold");
+
+        label2.setText("Left");
+
+        secondTickNumb.setText(" ");
+
+        firstTickNumb.setText(" ");
+
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setText("1st");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setText("2nd");
+        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton2ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton3);
+        jRadioButton3.setText("3rd");
+        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton3ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton4);
+        jRadioButton4.setText("4th");
+        jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton4ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton5);
+        jRadioButton5.setText("5th");
+        jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton5ActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Ticket Total");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(firstLeft, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                                            .addComponent(firstSold)
+                                            .addComponent(firstTickNumb))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(secondTickNumb, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                                                .addComponent(secondSold, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(secondLeft, javax.swing.GroupLayout.Alignment.TRAILING))
+                                            .addComponent(jRadioButton2))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jRadioButton3)
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(thirdSold, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                                                .addComponent(thirdLeft, javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(thirdTickNumb))))
+                                    .addComponent(jRadioButton1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(forthSold, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                                            .addComponent(forthTickNumb, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(forthLeft))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jRadioButton4)
+                                        .addGap(29, 29, 29)))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(fifthLeft)
+                                    .addComponent(fifthSold, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(fifthTickNumb, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                        .addGap(29, 29, 29)
+                                        .addComponent(jRadioButton5)
+                                        .addGap(0, 34, Short.MAX_VALUE)))
+                                .addGap(36, 36, 36)))
+                        .addGap(32, 32, 32))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(firstLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(firstSold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(secondSold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(thirdSold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(forthSold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(fifthSold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(firstTickNumb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(secondTickNumb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(thirdTickNumb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(forthTickNumb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(fifthTickNumb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jRadioButton1)
+                                .addComponent(jRadioButton2)
+                                .addComponent(jRadioButton3))
+                            .addComponent(jRadioButton5)
+                            .addComponent(jRadioButton4)))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(secondLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(thirdLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(forthLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(fifthLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(jLabel6))
+        );
+
+        label1.getAccessibleContext().setAccessibleName("label1");
+
+        label5.setText("Ticket numbers are organized month, day, year, showing, and ticket number.");
+
+        tbox.setText("         ");
+        tbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tboxActionPerformed(evt);
+            }
+        });
+
+        FutureT.setText("Future ticket");
+
+        futureTickets.setText("    ");
+        futureTickets.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                futureTicketsActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Name desired date & showtime. # of Tickets ");
+
         jMenu1.setText("ROXYSOFT");
         jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Configure Movie");
+        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -433,55 +695,10 @@ public class sell extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
+                        .addGap(37, 37, 37)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jButton3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(secondShowing)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(thirdShowing)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(forthShowing)
-                                .addGap(82, 82, 82)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(buck, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(fivebucks, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(1, 1, 1)))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(twentybucks, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(12, 12, 12)
-                                                .addComponent(subtotalbox, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                                .addComponent(tenbucks, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(tenderbox, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel1)
-                                            .addComponent(jLabel2))
-                                        .addGap(23, 23, 23)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(cancel)
-                                            .addComponent(canbox, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel3))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(fiftybucks, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(1, 1, 1)
-                                        .addComponent(jButton2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(changebox, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(40, 40, 40))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(kp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -499,7 +716,15 @@ public class sell extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(monster)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(clear, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(futureTickets, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(100, 100, 100)
+                                                .addComponent(clear, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(FutureT)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabel7))))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(7, 7, 7)
                                         .addComponent(sp)
@@ -546,12 +771,65 @@ public class sell extends javax.swing.JFrame {
                                                 .addComponent(scombo, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addComponent(kcombo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(0, 0, Short.MAX_VALUE)))
-                                .addGap(795, 795, 795)))
-                        .addGap(12, 12, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(done, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(455, 455, 455))
+                                .addGap(795, 795, 795))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(dateStamp, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(10, 10, 10)
+                                                .addComponent(tbox, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(19, 19, 19)
+                                                .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(70, 70, 70)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(buck, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                        .addComponent(fivebucks, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(1, 1, 1)))
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(twentybucks, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(12, 12, 12)
+                                                        .addComponent(subtotalbox, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                        .addComponent(tenbucks, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addComponent(tenderbox, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel1)
+                                                    .addComponent(jLabel2))
+                                                .addGap(23, 23, 23)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(cancel)
+                                                    .addComponent(canbox, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabel3))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(fiftybucks, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(1, 1, 1)
+                                                .addComponent(jButton2)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(changebox, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(40, 40, 40))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(done, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(434, 434, 434)))))
+                        .addContainerGap())))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {lemp, memp, semp});
@@ -565,19 +843,25 @@ public class sell extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(monster, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(clear, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(md, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
                                     .addComponent(ld, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                                    .addComponent(w, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(5, 5, 5)
-                                .addComponent(clear, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(monster, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(w, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(FutureT)
+                                            .addComponent(jLabel7))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(futureTickets, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 41, Short.MAX_VALUE)
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(rticket, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(sticket, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -593,25 +877,8 @@ public class sell extends javax.swing.JFrame {
                             .addComponent(tenbucks)
                             .addComponent(jLabel1)
                             .addComponent(canbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(twentybucks)
-                            .addComponent(fivebucks)
-                            .addComponent(subtotalbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cancel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2)
-                            .addComponent(fiftybucks)
-                            .addComponent(changebox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addComponent(jButton3)
-                            .addComponent(secondShowing)
-                            .addComponent(thirdShowing)
-                            .addComponent(forthShowing)))
-                    .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel3)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(kd, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(sd, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -644,9 +911,32 @@ public class sell extends javax.swing.JFrame {
                                 .addComponent(lcombo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(3, 3, 3)
                                 .addComponent(scombo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addComponent(done, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(76, 76, 76)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(twentybucks)
+                        .addComponent(fivebucks)
+                        .addComponent(subtotalbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cancel))
+                    .addComponent(dateStamp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton2)
+                            .addComponent(fiftybucks)
+                            .addComponent(changebox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addComponent(done, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(69, 69, 69)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 4, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -666,6 +956,7 @@ public class sell extends javax.swing.JFrame {
         this.subtotalbox.setText(" ");
         this.subtotalarea.setText(" ");
         this.changebox.setText(" ");
+        tempTicketCounter = 0;
         subnum=0;
         
     }//GEN-LAST:event_clearActionPerformed
@@ -706,9 +997,10 @@ public class sell extends javax.swing.JFrame {
         // TODO add your handling code here:
         // TODO add your handling code here:
         String subt = this.subtotalarea.getText();
-        this.subtotalarea.setText(subt+"\n" + whatShow + " Kids "+"$0.00");
+        this.subtotalarea.setText(subt+"\n" + whichShow + " Kids "+"$0.00");
         subnum = subnum + 0.00 ;
-
+        tempTicketCounter++;
+        tempSeatsLeft++;
         this.subtotalbox.setText(""+subnum);
     }//GEN-LAST:event_kticketActionPerformed
 
@@ -716,8 +1008,10 @@ public class sell extends javax.swing.JFrame {
         // TODO add your handling code here:
         // TODO add your handling code here:
         String subt = this.subtotalarea.getText();
-        this.subtotalarea.setText(subt+"\n" + whatShow + " Senior Ticket "+"$4.00");
+        this.subtotalarea.setText(subt+"\n" + whichShow + " Senior Ticket "+"$4.00");
         subnum = subnum + 4.00 ;
+        tempTicketCounter++;
+        tempSeatsLeft++;
 
         this.subtotalbox.setText(""+subnum);
     }//GEN-LAST:event_sticketActionPerformed
@@ -726,9 +1020,10 @@ public class sell extends javax.swing.JFrame {
         // TODO add your handling code here:
         // TODO add your handling code here:
         String subt = this.subtotalarea.getText();
-        this.subtotalarea.setText(subt+"\n" + whatShow +" Regular Ticket "+"$5.00");
+        this.subtotalarea.setText(subt+"\n" + whichShow +" Regular Ticket "+"$5.00");
         subnum = subnum + 5.00 ;
-
+        tempTicketCounter++;
+        tempSeatsLeft++;
         this.subtotalbox.setText(""+subnum);
     }//GEN-LAST:event_rticketActionPerformed
 
@@ -923,11 +1218,34 @@ public class sell extends javax.swing.JFrame {
         try {
             out = new PrintWriter(new FileWriter("roxyrecord.txt", true));
            //worked! works! Whooot
+  
+            
+            
+            ticketsSold[indexSelect] = tempTicketCounter;
+            System.out.println(generateTicketCode());
+            fillInTicketsLeft();
+            fillInBoxTicketNumber();
+            fillInBoxTicketCode();
+
+            
             String subbtt = this.subtotalarea.getText();
             String stuff =subbtt+"\n"+"\n"+"SubTotal:"+subnum;
-            
-            out.println(stuff);
+            out.println(stuff+" "+dateFormatL.format(date)+" "+ generateTicketCode());
             out.close();
+            ticketsLeft[indexSelect] = ticketsLeft[indexSelect]-tempSeatsLeft;
+            
+           ticketTotal=ticketsSold[0]+ticketsSold[1]+ticketsSold[2]+ticketsSold[3]+ticketsSold[4];
+           this.tbox.setText(String.valueOf(ticketTotal));
+           
+           
+           
+            if(seatsLeft < 1){
+                
+                   JOptionPane.showMessageDialog(frame,
+                 "There are no more seats left",
+                  "Inane warning",
+                  JOptionPane.WARNING_MESSAGE);
+            }
             
             
             
@@ -935,6 +1253,8 @@ public class sell extends javax.swing.JFrame {
             this.subtotalbox.setText(" ");
             this.subtotalarea.setText(" ");
             this.changebox.setText(" ");
+            
+            
             subnum=0;
         } catch (FileNotFoundException ex) {
             Logger.getLogger(sell.class.getName()).log(Level.SEVERE, null, ex);
@@ -944,7 +1264,67 @@ public class sell extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_doneActionPerformed
-
+     void fillInBoxTicketNumber(){
+        if(indexSelect == 0){
+        this.firstSold.setText(generateTicketNumber());
+         }
+         if(indexSelect == 1){
+         this.secondSold.setText(generateTicketNumber());
+         }
+         if(indexSelect == 2){
+         this.thirdSold.setText(generateTicketNumber());
+         }
+         if(indexSelect == 3){
+         this.forthSold.setText(generateTicketNumber());
+         }
+         if(indexSelect == 4){
+         this.fifthSold.setText(generateTicketNumber());
+         }
+        
+    }
+ 
+ 
+    void fillInTicketsLeft(){
+        if(indexSelect == 0){
+     this.firstLeft.setText(Integer.toString(ticketsLeft[indexSelect]));
+         }
+         if(indexSelect == 1){
+     this.secondLeft.setText(Integer.toString(ticketsLeft[indexSelect]));
+         }
+         if(indexSelect == 2){
+     this.thirdLeft.setText(Integer.toString(ticketsLeft[indexSelect]));
+         }
+         if(indexSelect == 3){
+     this.forthLeft.setText(Integer.toString(ticketsLeft[indexSelect]));
+         }
+         if(indexSelect == 4){
+     this.fifthLeft.setText(Integer.toString(ticketsLeft[indexSelect]));
+         }
+        
+    }
+     void fillInBoxTicketCode(){
+         if(indexSelect == 0){
+     this.firstTickNumb.setText(generateTicketCode());
+         }
+         if(indexSelect == 1){
+     this.secondTickNumb.setText(generateTicketCode());
+         }
+         if(indexSelect == 2){
+     this.thirdTickNumb.setText(generateTicketCode());
+         }
+         if(indexSelect == 3){
+     this.forthTickNumb.setText(generateTicketCode());
+         }
+         if(indexSelect == 4){
+     this.fifthTickNumb.setText(generateTicketCode());
+         }
+     
+     }
+    
+    
+    
+    
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // This is the Change button Sorry
                   String t;
@@ -968,9 +1348,10 @@ public class sell extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         String subt = this.subtotalarea.getText();
-        this.subtotalarea.setText(subt+"\n" + whatShow + " Military Dicount "+"$4.00");
+        this.subtotalarea.setText(subt+"\n" + whichShow + " Military Dicount "+"$4.00");
         subnum = subnum + 4.00 ;
-
+        tempTicketCounter++;
+        seatsLeft++;
         this.subtotalbox.setText(""+subnum);
     }//GEN-LAST:event_mdiscountActionPerformed
 
@@ -986,29 +1367,6 @@ public class sell extends javax.swing.JFrame {
         
     }//GEN-LAST:event_monsterActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        
-        whatShow = "1stShowing";
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void secondShowingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_secondShowingActionPerformed
-        // TODO add your handling code here:
-            whatShow = "2ndShowing";
-    }//GEN-LAST:event_secondShowingActionPerformed
-
-    private void thirdShowingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thirdShowingActionPerformed
-        // TODO add your handling code here:
-         whatShow = "3rdShowing";
-        
-    }//GEN-LAST:event_thirdShowingActionPerformed
-
-    private void forthShowingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forthShowingActionPerformed
-        // TODO add your handling code here:
-        
-        whatShow = "4thShowing";
-    }//GEN-LAST:event_forthShowingActionPerformed
-
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         // TODO add your handling code here:
   
@@ -1019,10 +1377,79 @@ public class sell extends javax.swing.JFrame {
         this.canbox.setText(" ");
     }//GEN-LAST:event_cancelActionPerformed
 
+    private void dateStampActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateStampActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_dateStampActionPerformed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        // TODO add your handling code here:
+       // This set's the show array to 1
+        // That is it's recording for the first show
+        indexSelect = 0;
+        whichShow = "1st Showing";
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
+
+    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+        // TODO add your handling code here:
+        
+        indexSelect = 1;
+        whichShow = "2nd Showing";
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
+
+    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+        // TODO add your handling code here:
+        indexSelect = 2;
+        whichShow = "3rd Showing";
+    }//GEN-LAST:event_jRadioButton3ActionPerformed
+
+    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
+        // TODO add your handling code here:
+        indexSelect = 3;
+        whichShow = "4th Showing";
+    }//GEN-LAST:event_jRadioButton4ActionPerformed
+
+    private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
+        // TODO add your handling code here:
+        indexSelect = 4;
+        whichShow = "5th Showing";
+    }//GEN-LAST:event_jRadioButton5ActionPerformed
+
+    private void fifthLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fifthLeftActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fifthLeftActionPerformed
+
+    private void secondSoldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_secondSoldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_secondSoldActionPerformed
+
+    private void tboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tboxActionPerformed
+
+    private void futureTicketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_futureTicketsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_futureTicketsActionPerformed
+
     
+    private String generateTicketCode(){
+        
+            String a = Integer.toString(indexSelect+1);
+       String answer = dateFormatTicket.format(date)+a+"00"+ticketsSold[indexSelect];
+       return answer;
+        }
+    private String generateTicketNumber(){
+        
+            String a = Integer.toString(indexSelect+1);
+       String answer = Integer.toString(ticketsSold[indexSelect]);
+       return answer;
+        }
+    
+            
     /**
      * @param args the command line arguments
      */
+    @SuppressWarnings("empty-statement")
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -1054,35 +1481,74 @@ public class sell extends javax.swing.JFrame {
                 new sell().setVisible(true);
             }
         });
+        
+        
+        
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton FutureT;
     private javax.swing.JButton buck;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup10;
+    private javax.swing.ButtonGroup buttonGroup11;
+    private javax.swing.ButtonGroup buttonGroup12;
     private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.ButtonGroup buttonGroup3;
+    private javax.swing.ButtonGroup buttonGroup4;
+    private javax.swing.ButtonGroup buttonGroup5;
+    private javax.swing.ButtonGroup buttonGroup6;
+    private javax.swing.ButtonGroup buttonGroup7;
+    private javax.swing.ButtonGroup buttonGroup8;
+    private javax.swing.ButtonGroup buttonGroup9;
     private javax.swing.JTextField canbox;
     private javax.swing.JButton cancel;
     private javax.swing.JTextField changebox;
     private javax.swing.JButton clear;
+    private javax.swing.JTextField dateStamp;
     private javax.swing.JButton done;
+    private javax.swing.JTextField fifthLeft;
+    private javax.swing.JTextField fifthSold;
+    private javax.swing.JTextField fifthTickNumb;
     private javax.swing.JButton fiftybucks;
+    private javax.swing.JTextField firstLeft;
+    private javax.swing.JTextField firstSold;
+    private javax.swing.JTextField firstTickNumb;
     private javax.swing.JButton fivebucks;
-    private javax.swing.JButton forthShowing;
+    private javax.swing.JTextField forthLeft;
+    private javax.swing.JTextField forthSold;
+    private javax.swing.JTextField forthTickNumb;
+    private javax.swing.JTextField futureTickets;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButton3;
+    private javax.swing.JRadioButton jRadioButton4;
+    private javax.swing.JRadioButton jRadioButton5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton kcombo;
     private javax.swing.JButton kd;
     private javax.swing.JButton kp;
     private javax.swing.JButton kr;
     private javax.swing.JButton kticket;
+    private java.awt.Label label1;
+    private java.awt.Label label2;
+    private java.awt.Label label3;
+    private java.awt.Label label4;
+    private java.awt.Label label5;
     private javax.swing.JButton lc;
     private javax.swing.JButton lcombo;
     private javax.swing.JButton ld;
@@ -1098,15 +1564,20 @@ public class sell extends javax.swing.JFrame {
     private javax.swing.JButton sc;
     private javax.swing.JButton scombo;
     private javax.swing.JButton sd;
-    private javax.swing.JButton secondShowing;
+    private javax.swing.JTextField secondLeft;
+    private javax.swing.JTextField secondSold;
+    private javax.swing.JTextField secondTickNumb;
     private javax.swing.JButton semp;
     private javax.swing.JButton sp;
     private javax.swing.JButton sticket;
     private javax.swing.JTextArea subtotalarea;
     private javax.swing.JTextField subtotalbox;
+    private javax.swing.JTextField tbox;
     private javax.swing.JButton tenbucks;
     private javax.swing.JTextField tenderbox;
-    private javax.swing.JButton thirdShowing;
+    private javax.swing.JTextField thirdLeft;
+    private javax.swing.JTextField thirdSold;
+    private javax.swing.JTextField thirdTickNumb;
     private javax.swing.JButton twentybucks;
     private javax.swing.JButton w;
     // End of variables declaration//GEN-END:variables
